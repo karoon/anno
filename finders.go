@@ -4,10 +4,15 @@ import "bytes"
 
 // Punctuation is a string of common punctuation and quotation characters.
 var Punctuation = `.?!'",;`
+var MentionPunctuation = `?!'",;`
 
 // TrimPunctuation trims off Punctuation characters.
 func TrimPunctuation(s []byte) []byte {
 	return bytes.Trim(s, Punctuation)
+}
+
+func TrimMentionPunctuation(s []byte) []byte {
+	return bytes.Trim(s, MentionPunctuation)
 }
 
 var tlds = [][]byte{
@@ -67,7 +72,7 @@ var URLs = FieldFunc("url", func(s []byte) (bool, []byte) {
 
 // Mentions finds @twitter style mentions.
 var Mentions = FieldFunc("mention", func(s []byte) (bool, []byte) {
-	trimmedS := TrimPunctuation(s)
+	trimmedS := TrimMentionPunctuation(s)
 	return bytes.HasPrefix(trimmedS, []byte("@")), trimmedS
 })
 
